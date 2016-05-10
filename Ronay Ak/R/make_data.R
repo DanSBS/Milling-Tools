@@ -3,18 +3,18 @@
 # Author: Daniel V Samarov
 ###############################################################################
 
-X <- read.csv('data/X_training.csv', header = TRUE,
+X <- read.csv('data/training1.csv', header = TRUE,
 		stringsAsFactors = FALSE, as.is = TRUE)
 dim(X)
 # [1] 2209   13
 names(X) <- tolower(names(X))
 
-Y <- as.numeric(as.matrix(read.csv('data/Y.csv', header = TRUE)))
+Y <- as.numeric(as.matrix(read.csv('data/Y1.csv', header = TRUE)))
 length(Y)
 # [1] 2209    1
 
 ## Defining factors
-fac <- tolower(c('cut_direct', 'cut_method'))
+fac <- tolower(c('cutdirect', 'cutmethod'))
 
 ## Grabbing continuous variables
 Xc <- as.matrix(X[,!(names(X) %in% fac)])
@@ -40,11 +40,16 @@ head(test_df)
 
 ## Grabbing continuous variables
 tnms <- tolower(names(test_df))
+tnms[tnms %in% c('cut_direct', 'cut_method')] <- c('cutdirect',
+		'cutmethod')
+Xt <- test_df
+names(Xt) <- tnms
 tnms <- tnms[-length(tnms)]
 xnms <- tolower(names(X))
 
 ## Reorder test_df
-Xt <- test_df[, match(xnms, tnms)]
+Xt <- Xt[, match(xnms, tnms)]
+#names(Xt) <- tnms
 all(tolower(names(Xt)) == tolower(names(X)))
 # [1] TRUE
 names(Xt) <- tolower(names(Xt))
