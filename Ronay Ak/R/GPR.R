@@ -15,8 +15,10 @@ source('R/make_data.R')
 
 ## GPR
 G <- gausspr(Xm, Y, scaled = FALSE)
-sum(abs(Y - predict(G)))/sum(Y)
-sum(abs(Yt - predict(G, Xtm))/sum(Yt))
-RMSE<-sqrt(mean((predict(G, Xtm)-Yt)^2))
+sqrt(mean((Y - predict(G, Xm))^2))
+# [1] 1.373861
+
+sqrt(mean((Yt - predict(G, Xtm))^2))
+# [1] 1.336081
 
 
