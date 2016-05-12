@@ -37,3 +37,5 @@ sum(abs(Y - predict(GLM, MB[,-1], s = 'lambda.min')))/sum(Y)
 sum(abs(Yt - predict(GLM, MBt[,-1], s = 'lambda.min')))/sum(Yt)
 RMSE<-sqrt(mean((Y - predict(GLM, MB[,-1], s = 'lambda.min'))^2))
 RMSEt<-sqrt(mean((Yt - predict(GLM, MBt[,-1], s = 'lambda.min'))^2))
+
+
