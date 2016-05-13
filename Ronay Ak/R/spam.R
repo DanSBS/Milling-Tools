@@ -46,6 +46,7 @@ function (X, y, p = 3, lambda = NULL, nlambda = NULL, lambda.min.ratio = 0.005,
 	Z = Z - Z.mean.rep
 	y.mean = mean(y)
 	y = y - y.mean
+#	Z <- Z
 	lambda_input = 1
 	if (is.null(lambda)) {
 		lambda_input = 0
@@ -62,6 +63,7 @@ function (X, y, p = 3, lambda = NULL, nlambda = NULL, lambda.min.ratio = 0.005,
 			df = as.integer(rep(0, nlambda)), sse = as.double(rep(0, 
 							nlambda)), func_norm = as.double(matrix(0, d, nlambda)), 
 			package = "SAM")
+#	browser()
 	fit$lambda = out$lambda
 	fit$w = matrix(out$w, ncol = nlambda)
 	fit$df = out$df
@@ -69,7 +71,7 @@ function (X, y, p = 3, lambda = NULL, nlambda = NULL, lambda.min.ratio = 0.005,
 	fit$func_norm = matrix(out$func_norm, ncol = nlambda)
 	fit$intercept = rep(y.mean, nlambda) - t(Z.mean) %*% fit$w
 	fit$nknots <- nknots
-	rm(out, X, y, Z, X.min.rep, X.ran.rep, Z.mean.rep)
+#	rm(out, X, y, Z, X.min.rep, X.ran.rep, Z.mean.rep)
 	class(fit) = "samQL"
 	return(fit)
 }
@@ -100,6 +102,7 @@ function (object, newdata, ...)
 	}
 #	browser()
 	out$values = cbind(Zt, rep(1, nt)) %*% rbind(object$w, object$intercept)
+#	out$values <- cbind(1,Zt) %*% object$w
 	rm(Zt, newdata)
 	return(out)
 }
