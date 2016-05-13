@@ -8,12 +8,13 @@ source('R/spam.R')
 
 Xs <- Xm[,c('feedrate','spindlespeed', 'ratio_cut', 'duration', 'cut_x', 'cut_y', 'cut_xy', 'cut_xyz')]
 sXs <- scale(Xs, scale = FALSE)
-SAM <- samQL(sXs, Y, p = 3, lambda.min.ratio=1e-1, nlambda = 100,
+SAM <- samQL(sXs, Y, p = 5, lambda.min.ratio=1e-1, nlambda = 100,
 		nknots = 3)
-
+ 
 cen <- attr(sXs, 'scaled:center')
 scl <- attr(sXs, 'scaled:scale')
 if(is.null(scl)) scl <- 1
+Xts <- Xtm[,c('feedrate','spindlespeed', 'ratio_cut', 'duration', 'cut_x', 'cut_y', 'cut_xy', 'cut_xyz')]
 sXts <- t((t(Xts) - cen)/scl)
 
 PSAM <- predict(SAM, newdata = sXs)[[1]]
