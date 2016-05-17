@@ -127,10 +127,38 @@ getVars <- function(object){
 	chk0s <- apply(w, 2, function(u){
 				sp <- split(u, rpp)
 				unlist(lapply(sp, function(v){
-									all(v == 0)
+									all(v != 0)
 								}))
 			})
 	rownames(chk0s) <- xnames
 	
 	return(chk0s)
+}
+
+cv.samQL <- function(X, y, p = 3, lambda = NULL, nlambda = NULL, lambda.min.ratio = 0.005, 
+		thol = 1e-05, max.ite = 1e+05, nknots = 9,
+		nfolds = 10){
+#	browser()
+	require(cvTools)
+	cv <- cvFolds(nrow(X), K = nfolds)
+	
+	score <- rbind()
+	for(i in 1:nfolds){
+		print(paste('CV fold:', i))
+		Xsub <- X[cv$which == i, ]
+		ysub <- y[cv$which == i]
+		SAM <- samQL(Xsub, ysub, p = p, lambda.min.ratio=lambda.min.ratio, 
+				nlambda = nlambda,
+				nknots = nknots)
+		PSAM <- predict(SAM, newdata = Xsub)[[1]]
+		tmp0 <- colSums((ysub - PSAM)^2)
+		tmp1 <- tmp0/(nrow(Xsub) - colSums(SAM$w!=0))
+		tmp <- nrow(Xsub)*log(tmp1) + log(nrow(Xsub)) * colSums(SAM$w!=0)
+		score <- rbind(tmp, score)
+	}
+#	browser()
+	SAMfin <- samQL(X, y, p = p, lambda.min.ratio=lambda.min.ratio, 
+			nlambda = nlambda,
+			nknots = nknots)
+	return(list(score = score, SAM = SAMfin))
 }
